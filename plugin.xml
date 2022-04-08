@@ -1,0 +1,20 @@
+<!-- To make the plugin discoverable by rqt the path to the library librqt_turtle.so needs to be specified -->
+<!-- The installed plugin library can be found in the devel/lib/ folder. -->
+<library path="lib/libpx4_gcs_rqt">
+  <class name="px4_gcs_rqt/GcsPlugin" type="px4_gcs_rqt::GcsPlugin" base_class_type="rqt_gui_cpp::Plugin">
+    <description>
+      Plugin for ROS rqt.
+    </description>
+    <qtgui>
+      <!-- group the plugin into the folder Robot Tools... -->
+      <group>
+        <label>Robot Tools</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to robot tools.</statustip>
+      </group>
+      <label>px4_gcs</label>
+      <icon type="theme">input-tablet</icon>
+      <statustip>Plugin for ROS rqt.</statustip>
+    </qtgui>
+  </class>
+</library>
