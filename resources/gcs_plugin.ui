@@ -7,35 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>618</width>
-    <height>307</height>
+    <height>342</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>px4_gcs_rqt</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="0">
-    <widget class="QPushButton" name="btnArming">
-     <property name="text">
-      <string>Arming</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="btnTrajectory">
-     <property name="text">
-      <string>Follow Trajectory</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="btnOffboard">
-     <property name="text">
-      <string>Offboard</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
+   <item row="5" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Teleop</string>
@@ -144,6 +123,34 @@
        <string>DOWN</string>
       </property>
      </widget>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="btnOffboard">
+     <property name="text">
+      <string>Offboard</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="btnTrajectory">
+     <property name="text">
+      <string>Follow Trajectory</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="btnArming">
+     <property name="text">
+      <string>Arming</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QPushButton" name="btnRecovery">
+     <property name="text">
+      <string>Recovery Mode</string>
+     </property>
     </widget>
    </item>
    <item row="3" column="1">

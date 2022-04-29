@@ -1,2 +1,4 @@
 rqt-turtle by Franz Pucher
 URL: https://github.com/fjp/rqt-turtle
+
+ui file generator: in terminal, type "designer"

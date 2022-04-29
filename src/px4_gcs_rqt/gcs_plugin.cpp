@@ -50,6 +50,7 @@ namespace px4_gcs_rqt {
         // connect(ui_->btnManual, SIGNAL(clicked()), this, SLOT(on_btnManual_clicked()));
         connect(ui_->btnTrajectory, SIGNAL(clicked()), this, SLOT(on_btnTrajectory_clicked()));
         connect(ui_->btnManipulator, SIGNAL(clicked()), this, SLOT(on_btnManipulator_clicked()));
+        connect(ui_->btnRecovery, SIGNAL(clicked()), this, SLOT(on_btnRecovery_clicked()));
 
         connect(ui_->btnDown, SIGNAL(clicked()), this, SLOT(on_btnDown_clicked()));
         connect(ui_->btnUp, SIGNAL(clicked()), this, SLOT(on_btnUp_clicked()));
@@ -161,7 +162,15 @@ namespace px4_gcs_rqt {
 
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/commander/useTrajectory", srv); // TODO - temporary service name
+        ros::service::call<std_srvs::SetBool>("/ref_planner/pos_sp_mode", srv);
+    }
+
+    void GcsPlugin::on_btnRecovery_clicked()
+    {
+        ROS_INFO("Recovery clicked");
+        std_srvs::SetBool srv;
+        srv.request.data = true;
+        ros::service::call<std_srvs::SetBool>("/ref_planner/recovery_mode", srv);
     }
 
     void GcsPlugin::on_btnManipulator_clicked()
@@ -174,7 +183,7 @@ namespace px4_gcs_rqt {
 
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/commander/useManipulator", srv); // TODO - temporary service name
+        ros::service::call<std_srvs::SetBool>("/ref_planner/joint_initial", srv); // TODO - temporary service name
     }
 
     void GcsPlugin::on_btnUp_clicked()

@@ -90,6 +90,7 @@ namespace px4_gcs_rqt {
         void on_btnOffboard_clicked();
         void on_btnTrajectory_clicked();
         void on_btnManipulator_clicked();
+        void on_btnRecovery_clicked();
         
         void on_btnUp_clicked();
         void on_btnDown_clicked();
