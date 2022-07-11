@@ -161,7 +161,7 @@ namespace px4_gcs_rqt {
             ROS_INFO_STREAM("Trajectory clicked. useTrajectory_flag: FALSE");
 
         std_srvs::SetBool srv;
-        srv.request.data = true;
+        srv.request.data = useTrajectory_flag_;
         ros::service::call<std_srvs::SetBool>("/ref_planner/pos_sp_mode", srv);
     }
 
