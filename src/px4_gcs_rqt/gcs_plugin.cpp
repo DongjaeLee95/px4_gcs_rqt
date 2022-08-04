@@ -141,7 +141,8 @@ namespace px4_gcs_rqt {
         ROS_INFO("Arming clicked");
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/commander/arm", srv);
+        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
+        // ros::service::call<std_srvs::SetBool>("/zrpy_controller/arming", srv);
     }
 
     void GcsPlugin::on_btnOffboard_clicked()
@@ -162,7 +163,7 @@ namespace px4_gcs_rqt {
 
         std_srvs::SetBool srv;
         srv.request.data = useTrajectory_flag_;
-        ros::service::call<std_srvs::SetBool>("/ref_planner/pos_sp_mode", srv);
+        ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
     }
 
     void GcsPlugin::on_btnRecovery_clicked()
@@ -259,7 +260,7 @@ namespace px4_gcs_rqt {
 			default:
 				break;
 		}
-		ros::service::call<mavros_msgs::CommandInt>("/commander/move_setpoint", cmd);
+		ros::service::call<mavros_msgs::CommandInt>("/ref_planner/move_setpoint", cmd);
 	}
 
     // QVariantMap GcsPlugin::teleport(std::string strServiceName)
