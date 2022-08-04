@@ -12,10 +12,11 @@
 #include <ros/param.h>
 #include <ros/topic.h>
 
-#include <mavros_msgs/CommandInt.h>
-#include <mavros_msgs/State.h>
+#include "ctrller_msgs/CommandInt.h"
 
-#include "ui_gcs_plugin.h"
+// #include <mavros_msgs/CommandInt.h>
+
+#include "ui_gcs_plugin_tiltrotor.h"
 
 // #include "px4_gcs_rqt/service_caller.h"
 
@@ -45,12 +46,10 @@ namespace px4_gcs_rqt {
         context.addWidget(widget_);
 
         connect(ui_->btnArming, SIGNAL(clicked()), this, SLOT(on_btnArming_clicked()));
-        // connect(ui_->btnDisarming, SIGNAL(clicked()), this, SLOT(on_btnDisarming_clicked()));
-        connect(ui_->btnOffboard, SIGNAL(clicked()), this, SLOT(on_btnOffboard_clicked()));
-        // connect(ui_->btnManual, SIGNAL(clicked()), this, SLOT(on_btnManual_clicked()));
+        connect(ui_->btnDisarming, SIGNAL(clicked()), this, SLOT(on_btnDisarming_clicked()));
+        
         connect(ui_->btnTrajectory, SIGNAL(clicked()), this, SLOT(on_btnTrajectory_clicked()));
         connect(ui_->btnManipulator, SIGNAL(clicked()), this, SLOT(on_btnManipulator_clicked()));
-        connect(ui_->btnRecovery, SIGNAL(clicked()), this, SLOT(on_btnRecovery_clicked()));
 
         connect(ui_->btnDown, SIGNAL(clicked()), this, SLOT(on_btnDown_clicked()));
         connect(ui_->btnUp, SIGNAL(clicked()), this, SLOT(on_btnUp_clicked()));
@@ -59,7 +58,8 @@ namespace px4_gcs_rqt {
         connect(ui_->btnLeft, SIGNAL(clicked()), this, SLOT(on_btnLeft_clicked()));
         connect(ui_->btnRight, SIGNAL(clicked()), this, SLOT(on_btnRight_clicked()));
         connect(ui_->btnCw, SIGNAL(clicked()), this, SLOT(on_btnCw_clicked()));
-        connect(ui_->btnCcw, SIGNAL(clicked()), this, SLOT(on_btnCcw_clicked()));
+        connect(ui_->btnPitch_plus, SIGNAL(clicked()), this, SLOT(on_btnPitchPlus_clicked()));
+        connect(ui_->btnPitch_minus, SIGNAL(clicked()), this, SLOT(on_btnPitchMinus_clicked()));
 
         // connect(ui_->treeDrones, SIGNAL(itemSelectionChanged()), 
         //         this, SLOT(on_selection_changed()));
@@ -142,15 +142,14 @@ namespace px4_gcs_rqt {
         std_srvs::SetBool srv;
         srv.request.data = true;
         ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
-        // ros::service::call<std_srvs::SetBool>("/zrpy_controller/arming", srv);
     }
 
-    void GcsPlugin::on_btnOffboard_clicked()
+     void GcsPlugin::on_btnDisarming_clicked()
     {
-        ROS_INFO("Offboard clicked");
+        ROS_INFO("Disarming clicked");
         std_srvs::SetBool srv;
-        srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/commander/flight_mode", srv);
+        srv.request.data = false;
+        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
     }
 
     void GcsPlugin::on_btnTrajectory_clicked()
@@ -164,14 +163,6 @@ namespace px4_gcs_rqt {
         std_srvs::SetBool srv;
         srv.request.data = useTrajectory_flag_;
         ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
-    }
-
-    void GcsPlugin::on_btnRecovery_clicked()
-    {
-        ROS_INFO("Recovery clicked");
-        std_srvs::SetBool srv;
-        srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/ref_planner/recovery_mode", srv);
     }
 
     void GcsPlugin::on_btnManipulator_clicked()
@@ -235,13 +226,26 @@ namespace px4_gcs_rqt {
         move_setpoint(clicked_btn::CWCCW,true);
     }
 
+    void GcsPlugin::on_btnPitchPlus_clicked()
+    {
+        ROS_INFO("[Teleop] Pitch Plus clicked");
+        move_setpoint(clicked_btn::PITCH_PM,true);
+    }
+
+    void GcsPlugin::on_btnPitchMinus_clicked()
+    {
+        ROS_INFO("[Teleop] Pitch Minus clicked");
+        move_setpoint(clicked_btn::PITCH_PM,false);
+    }
+
     void GcsPlugin::move_setpoint(int idx, bool increase)
 	{
-		mavros_msgs::CommandInt cmd;
-		cmd.request.param1 = 0.0;
-		cmd.request.param2 = 0.0;
-		cmd.request.param3 = 0.0;
-		cmd.request.param4 = 0.0;
+		ctrller_msgs::CommandInt cmd;
+		cmd.request.param1 = 0.0; // x
+		cmd.request.param2 = 0.0; // y
+		cmd.request.param3 = 0.0; // z
+		cmd.request.param4 = 0.0; // yaw
+        cmd.request.param5 = 0.0; // pitch
 
 		switch( idx )
 		{
@@ -257,10 +261,13 @@ namespace px4_gcs_rqt {
 			case clicked_btn::CWCCW:
 				increase ? cmd.request.param4 = 0.1 : cmd.request.param4 = -0.1;
 				break;
+            case clicked_btn::PITCH_PM:
+				increase ? cmd.request.param5 = 0.1 : cmd.request.param5 = -0.1;
+				break;    
 			default:
 				break;
 		}
-		ros::service::call<mavros_msgs::CommandInt>("/ref_planner/move_setpoint", cmd);
+		ros::service::call<ctrller_msgs::CommandInt>("/ref_planner/move_setpoint", cmd);
 	}
 
     // QVariantMap GcsPlugin::teleport(std::string strServiceName)

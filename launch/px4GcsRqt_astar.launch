@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-    <!-- astar -->
-    <include file="$(find astar)/launch/astar_dj.launch"/>
-
-    <!-- px4_gcs_rqt -->
-    <node name = "px4_gcs_rqt" pkg = "rqt_gui" type = "rqt_gui" output="screen"/>
-
-</launch>

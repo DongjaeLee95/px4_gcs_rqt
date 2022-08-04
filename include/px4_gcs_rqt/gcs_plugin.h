@@ -1,6 +1,7 @@
 #ifndef px4_gcs_rqt__gcs_plugin_H
 #define px4_gcs_rqt__gcs_plugin_H
 
+
 #include <rqt_gui_cpp/plugin.h>
 
 #include <QWidget>
@@ -46,7 +47,7 @@ namespace px4_gcs_rqt {
         //bool hasConfiguration() const;
         //void triggerConfiguration();
     private:
-        enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, CWCCW = 3 }; // front, back
+        enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, CWCCW = 3, PITCH_PM = 4 }; // front, back
         
         bool useTrajectory_flag_ = false;
         bool moveManipulator_flag_ = false;
@@ -87,10 +88,9 @@ namespace px4_gcs_rqt {
 
     private slots:
         void on_btnArming_clicked();
-        void on_btnOffboard_clicked();
+        void on_btnDisarming_clicked();
         void on_btnTrajectory_clicked();
         void on_btnManipulator_clicked();
-        void on_btnRecovery_clicked();
         
         void on_btnUp_clicked();
         void on_btnDown_clicked();
@@ -100,6 +100,8 @@ namespace px4_gcs_rqt {
         void on_btnRight_clicked();
         void on_btnCw_clicked();
         void on_btnCcw_clicked();
+        void on_btnPitchPlus_clicked();
+        void on_btnPitchMinus_clicked();
 
         void move_setpoint(int idx, bool increase);
 
@@ -114,5 +116,4 @@ namespace px4_gcs_rqt {
     };
 
 } // namespace
-
-#endif // px4_gcs_rqt__turtle_plugin_H
+#endif // px4_gcs_rqt__gcs_plugin_H

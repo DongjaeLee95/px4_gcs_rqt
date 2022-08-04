@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   rqt_gui
   rqt_gui_cpp
   std_msgs
+  ctrller_msgs
 )
 
 find_package(Qt5Widgets REQUIRED)
@@ -30,7 +31,7 @@ set(px4_gcs_rqt_HDRS
 )
 
 set(px4_gcs_rqt_UIS
-  resources/gcs_plugin.ui
+  resources/gcs_plugin_tiltrotor.ui
   # resources/ServiceCaller.ui
 )
 
