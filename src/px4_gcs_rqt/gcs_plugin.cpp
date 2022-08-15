@@ -58,6 +58,7 @@ namespace px4_gcs_rqt {
         connect(ui_->btnLeft, SIGNAL(clicked()), this, SLOT(on_btnLeft_clicked()));
         connect(ui_->btnRight, SIGNAL(clicked()), this, SLOT(on_btnRight_clicked()));
         connect(ui_->btnCw, SIGNAL(clicked()), this, SLOT(on_btnCw_clicked()));
+        connect(ui_->btnCcw, SIGNAL(clicked()), this, SLOT(on_btnCcw_clicked()));
         connect(ui_->btnPitch_plus, SIGNAL(clicked()), this, SLOT(on_btnPitchPlus_clicked()));
         connect(ui_->btnPitch_minus, SIGNAL(clicked()), this, SLOT(on_btnPitchMinus_clicked()));
 
