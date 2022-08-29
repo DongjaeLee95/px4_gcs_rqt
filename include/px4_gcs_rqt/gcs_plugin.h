@@ -8,6 +8,8 @@
 #include <QSharedPointer>
 #include <QVariantMap>
 
+#include <ros/ros.h>
+#include "ctrller_msgs/Pwm.h"
 // #include <px4_gcs_rqt/drone.h>
 
 
@@ -32,6 +34,7 @@ namespace px4_gcs_rqt {
          * @details All qt signal to slot connections are done here.
          */
         GcsPlugin();
+        ~GcsPlugin();
 
         /**
          * @brief Setup the plugin and the signal and slot connections.
@@ -47,10 +50,14 @@ namespace px4_gcs_rqt {
         //bool hasConfiguration() const;
         //void triggerConfiguration();
     private:
+        ros::NodeHandle* nh_;
+        ros::Publisher pwm_pub_;
+        ctrller_msgs::Pwm pwm_msg_;
+
         enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, CWCCW = 3, PITCH_PM = 4 }; // front, back
         
         bool useTrajectory_flag_ = false;
-        bool moveManipulator_flag_ = false;
+        bool perching_flag_ = false;
 
         /// Pointer to reference the main ui widgets of the turtle_plugin.ui
         Ui::GcsPluginWidget* ui_;
@@ -60,37 +67,13 @@ namespace px4_gcs_rqt {
         /// Pointer to the ServiceCaller class dialog
         QSharedPointer<ServiceCaller> service_caller_dialog_;       
 
-        /// Storing the currently selected turtles present in the treeTrutles QTreeWdiget.
-        // QVector<QString> selected_drones_;
-
-        /// Vector to keep track of all turtles (keep turtles on the heap using vector of shared pointers)
-        // QMap<QString, QSharedPointer<Drone> > drones_;
-
-
-        /**
-         * @brief Teleport selected turtle(s)
-         * 
-         * @details teleport is used for both slots, on_btnTeleportAbs_clicked and 
-         * on_btnTeleportRel_clicked. It will create a new ServiceCaller widget,
-         * which allows to enter the coordinates where the turtle should be teleported.
-         * Depending on the pressed button ('Teleport Abs' or 'Teleport Rel'), either
-         * the '/teleport_absoulte' or '/teleport_relative' service will be executed with the
-         * provided coordinates.
-         * 
-         * @param teleport_type Can be one of /teleport_absolute or /teleport_relative
-         */
-        // QVariantMap teleport(std::string teleport_type);
-
-        // void updateDroneTree();
-
-
         inline std::string str(QString qstr) { return qstr.toStdString(); };
 
     private slots:
         void on_btnArming_clicked();
         void on_btnDisarming_clicked();
         void on_btnTrajectory_clicked();
-        void on_btnManipulator_clicked();
+        void on_btnPerching_clicked();
         
         void on_btnUp_clicked();
         void on_btnDown_clicked();
@@ -103,16 +86,9 @@ namespace px4_gcs_rqt {
         void on_btnPitchPlus_clicked();
         void on_btnPitchMinus_clicked();
 
-        void move_setpoint(int idx, bool increase);
+        void receive_sliderValue(int);
 
-        /**
-         * @brief Keeps track of the slected turtles
-         * 
-         * @details When selecting different turtles in the QTreeWidget,
-         * the member selected_drones_ storing the selected turtles is updated.
-         * 
-         */
-        // void on_selection_changed();
+        void move_setpoint(int idx, bool increase);
     };
 
 } // namespace
