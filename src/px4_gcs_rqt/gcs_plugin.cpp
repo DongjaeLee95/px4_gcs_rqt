@@ -12,11 +12,11 @@
 #include <ros/param.h>
 #include <ros/topic.h>
 
-#include "ctrller_msgs/CommandInt.h"
+#include "ctrller_msgs/CommandInt6.h"
 
 // #include <mavros_msgs/CommandInt.h>
 
-#include "ui_gcs_plugin_tiltrotor.h"
+#include "ui_gcs_plugin_6dof.h"
 
 // #include "px4_gcs_rqt/service_caller.h"
 
@@ -65,10 +65,12 @@ namespace px4_gcs_rqt {
         connect(ui_->btnBack, SIGNAL(clicked()), this, SLOT(on_btnBack_clicked()));
         connect(ui_->btnLeft, SIGNAL(clicked()), this, SLOT(on_btnLeft_clicked()));
         connect(ui_->btnRight, SIGNAL(clicked()), this, SLOT(on_btnRight_clicked()));
-        connect(ui_->btnCw, SIGNAL(clicked()), this, SLOT(on_btnCw_clicked()));
-        connect(ui_->btnCcw, SIGNAL(clicked()), this, SLOT(on_btnCcw_clicked()));
+        connect(ui_->btnRoll_plus, SIGNAL(clicked()), this, SLOT(on_btnRollPlus_clicked()));
+        connect(ui_->btnRoll_minus, SIGNAL(clicked()), this, SLOT(on_btnRollMinus_clicked()));
         connect(ui_->btnPitch_plus, SIGNAL(clicked()), this, SLOT(on_btnPitchPlus_clicked()));
         connect(ui_->btnPitch_minus, SIGNAL(clicked()), this, SLOT(on_btnPitchMinus_clicked()));
+        connect(ui_->btnYaw_minus, SIGNAL(clicked()), this, SLOT(on_btnYawMinus_clicked()));
+        connect(ui_->btnYaw_plus, SIGNAL(clicked()), this, SLOT(on_btnYawPlus_clicked()));
 
         connect(ui_->verticalSlider, SIGNAL(sliderMoved(int)), this, SLOT(receive_sliderValue(int)));
     }
@@ -168,16 +170,16 @@ namespace px4_gcs_rqt {
         move_setpoint(clicked_btn::LEFTRIGHT,false);
     }
 
-    void GcsPlugin::on_btnCw_clicked()
+    void GcsPlugin::on_btnRollPlus_clicked()
     {
-        ROS_INFO("[Teleop] Cw clicked");
-        move_setpoint(clicked_btn::CWCCW,false);
+        ROS_INFO("[Teleop] Roll Plus clicked");
+        move_setpoint(clicked_btn::ROLL_PM,true);
     }
 
-    void GcsPlugin::on_btnCcw_clicked()
+    void GcsPlugin::on_btnRollMinus_clicked()
     {
-        ROS_INFO("[Teleop] Ccw clicked");
-        move_setpoint(clicked_btn::CWCCW,true);
+        ROS_INFO("[Teleop] Roll Minus clicked");
+        move_setpoint(clicked_btn::ROLL_PM,false);
     }
 
     void GcsPlugin::on_btnPitchPlus_clicked()
@@ -192,6 +194,18 @@ namespace px4_gcs_rqt {
         move_setpoint(clicked_btn::PITCH_PM,false);
     }
 
+    void GcsPlugin::on_btnYawPlus_clicked()
+    {
+        ROS_INFO("[Teleop] Yaw Plus clicked");
+        move_setpoint(clicked_btn::YAW_PM,true);
+    }
+
+    void GcsPlugin::on_btnYawMinus_clicked()
+    {
+        ROS_INFO("[Teleop] Yaw Minus clicked");
+        move_setpoint(clicked_btn::YAW_PM,false);
+    }
+
     void GcsPlugin::receive_sliderValue(int pwm)
     {
         pwm_msg_.header.stamp = ros::Time::now();
@@ -203,12 +217,13 @@ namespace px4_gcs_rqt {
 
     void GcsPlugin::move_setpoint(int idx, bool increase)
 	{
-		ctrller_msgs::CommandInt cmd;
+		ctrller_msgs::CommandInt6 cmd;
 		cmd.request.param1 = 0.0; // x
 		cmd.request.param2 = 0.0; // y
 		cmd.request.param3 = 0.0; // z
-		cmd.request.param4 = 0.0; // yaw
+		cmd.request.param4 = 0.0; // roll
         cmd.request.param5 = 0.0; // pitch
+        cmd.request.param6 = 0.0; // yaw
 
 		switch( idx )
 		{
@@ -221,16 +236,19 @@ namespace px4_gcs_rqt {
 			case clicked_btn::UPDOWN:
 				increase ? cmd.request.param3 = 0.1 : cmd.request.param3 = -0.1;
 				break;
-			case clicked_btn::CWCCW:
+			case clicked_btn::ROLL_PM:
 				increase ? cmd.request.param4 = 0.1 : cmd.request.param4 = -0.1;
 				break;
             case clicked_btn::PITCH_PM:
 				increase ? cmd.request.param5 = 0.1 : cmd.request.param5 = -0.1;
-				break;    
+				break;
+            case clicked_btn::YAW_PM:
+				increase ? cmd.request.param6 = 0.1 : cmd.request.param6 = -0.1;
+				break;
 			default:
 				break;
 		}
-		ros::service::call<ctrller_msgs::CommandInt>("/ref_planner/move_setpoint", cmd);
+		ros::service::call<ctrller_msgs::CommandInt6>("/ref_planner/move_setpoint", cmd);
 	}
 } // namespace
 

@@ -31,7 +31,7 @@ set(px4_gcs_rqt_HDRS
 )
 
 set(px4_gcs_rqt_UIS
-  resources/gcs_plugin_tiltrotor.ui
+  resources/gcs_plugin_6dof.ui
   # resources/ServiceCaller.ui
 )
 

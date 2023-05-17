@@ -54,7 +54,8 @@ namespace px4_gcs_rqt {
         ros::Publisher pwm_pub_;
         ctrller_msgs::Pwm pwm_msg_;
 
-        enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, CWCCW = 3, PITCH_PM = 4 }; // front, back
+        enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, 
+                          ROLL_PM = 3, PITCH_PM = 4, YAW_PM = 5 }; // front, back
         
         bool useTrajectory_flag_ = false;
         bool perching_flag_ = false;
@@ -81,10 +82,12 @@ namespace px4_gcs_rqt {
         void on_btnBack_clicked();
         void on_btnLeft_clicked();
         void on_btnRight_clicked();
-        void on_btnCw_clicked();
-        void on_btnCcw_clicked();
+        void on_btnRollPlus_clicked();
+        void on_btnRollMinus_clicked();
         void on_btnPitchPlus_clicked();
         void on_btnPitchMinus_clicked();
+        void on_btnYawMinus_clicked();
+        void on_btnYawPlus_clicked();
 
         void receive_sliderValue(int);
 
