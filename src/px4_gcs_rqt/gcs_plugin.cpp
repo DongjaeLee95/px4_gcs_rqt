@@ -54,10 +54,10 @@ namespace px4_gcs_rqt {
         context.addWidget(widget_);
 
         connect(ui_->btnArming, SIGNAL(clicked()), this, SLOT(on_btnArming_clicked()));
-        connect(ui_->btnDisarming, SIGNAL(clicked()), this, SLOT(on_btnDisarming_clicked()));
+        connect(ui_->btnTransitToFF, SIGNAL(clicked()), this, SLOT(on_btnTransitToFF_clicked()));
         
-        connect(ui_->btnTrajectory, SIGNAL(clicked()), this, SLOT(on_btnTrajectory_clicked()));
-        connect(ui_->btnPerching, SIGNAL(clicked()), this, SLOT(on_btnPerching_clicked()));
+        connect(ui_->btnUsePlanner, SIGNAL(clicked()), this, SLOT(on_btnUsePlanner_clicked()));
+        connect(ui_->btnTransitToPerch, SIGNAL(clicked()), this, SLOT(on_btnTransitToPerch_clicked()));
 
         connect(ui_->btnDown, SIGNAL(clicked()), this, SLOT(on_btnDown_clicked()));
         connect(ui_->btnUp, SIGNAL(clicked()), this, SLOT(on_btnUp_clicked()));
@@ -94,44 +94,44 @@ namespace px4_gcs_rqt {
 
     void GcsPlugin::on_btnArming_clicked()
     {
-        ROS_INFO("Arming clicked");
+        arming_flag_ = !arming_flag_;
+        if(arming_flag_ == true)
+            ROS_INFO("ARMED");
+        else
+            ROS_INFO("DISARMED");
+        std_srvs::SetBool srv;
+        srv.request.data = arming_flag_;
+        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
+    }
+
+     void GcsPlugin::on_btnTransitToFF_clicked()
+    {
+        ROS_INFO_STREAM("Transit_to_FF clicked.");
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
+        ros::service::call<std_srvs::SetBool>("/ctrller/transitTo_ff", srv);
     }
 
-     void GcsPlugin::on_btnDisarming_clicked()
-    {
-        ROS_INFO("Disarming clicked");
-        std_srvs::SetBool srv;
-        srv.request.data = false;
-        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
-    }
-
-    void GcsPlugin::on_btnTrajectory_clicked()
+    void GcsPlugin::on_btnUsePlanner_clicked()
     {
         useTrajectory_flag_ = !useTrajectory_flag_;
         if( useTrajectory_flag_ == true)
-            ROS_INFO_STREAM("Trajectory clicked. useTrajectory_flag: TRUE");
+            ROS_INFO_STREAM("usePlanner clicked. useTrajectory_flag: TRUE");
         else
-            ROS_INFO_STREAM("Trajectory clicked. useTrajectory_flag: FALSE");
+            ROS_INFO_STREAM("usePlanner clicked. useTrajectory_flag: FALSE");
 
         std_srvs::SetBool srv;
         srv.request.data = useTrajectory_flag_;
         ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
     }
 
-    void GcsPlugin::on_btnPerching_clicked()
+    void GcsPlugin::on_btnTransitToPerch_clicked()
     {
-        perching_flag_ = !perching_flag_;
-        if( perching_flag_ == true)
-            ROS_INFO_STREAM("Perching clicked. perching_flag: TRUE");
-        else
-            ROS_INFO_STREAM("Perching clicked. perching_flag: FALSE");
+        ROS_INFO_STREAM("Transit_to_perch clicked.");
 
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/perching", srv); // TODO - temporary service name
+        ros::service::call<std_srvs::SetBool>("/ctrller/transitTo_perch", srv); // TODO - temporary service name
     }
 
     void GcsPlugin::on_btnUp_clicked()

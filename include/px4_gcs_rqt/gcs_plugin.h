@@ -56,9 +56,9 @@ namespace px4_gcs_rqt {
 
         enum clicked_btn{ UPDOWN = 0, FRONTBACK = 1, LEFTRIGHT = 2, 
                           ROLL_PM = 3, PITCH_PM = 4, YAW_PM = 5 }; // front, back
-        
+
+        bool arming_flag_ = false; 
         bool useTrajectory_flag_ = false;
-        bool perching_flag_ = false;
 
         /// Pointer to reference the main ui widgets of the turtle_plugin.ui
         Ui::GcsPluginWidget* ui_;
@@ -72,9 +72,9 @@ namespace px4_gcs_rqt {
 
     private slots:
         void on_btnArming_clicked();
-        void on_btnDisarming_clicked();
-        void on_btnTrajectory_clicked();
-        void on_btnPerching_clicked();
+        void on_btnTransitToFF_clicked();
+        void on_btnUsePlanner_clicked();
+        void on_btnTransitToPerch_clicked();
         
         void on_btnUp_clicked();
         void on_btnDown_clicked();
