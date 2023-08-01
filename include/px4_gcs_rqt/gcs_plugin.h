@@ -58,6 +58,7 @@ namespace px4_gcs_rqt {
                           ROLL_PM = 3, PITCH_PM = 4, YAW_PM = 5 }; // front, back
 
         bool arming_flag_ = false; 
+        bool ctrl_start_flag_ = false;
         bool useTrajectory_flag_ = false;
 
         /// Pointer to reference the main ui widgets of the turtle_plugin.ui
@@ -72,6 +73,7 @@ namespace px4_gcs_rqt {
 
     private slots:
         void on_btnArming_clicked();
+        void on_btnCtrlStart_clicked();
         void on_btnTransitToFF_clicked();
         void on_btnUsePlanner_clicked();
         void on_btnTransitToPerch_clicked();

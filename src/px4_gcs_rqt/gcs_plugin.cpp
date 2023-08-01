@@ -54,6 +54,7 @@ namespace px4_gcs_rqt {
         context.addWidget(widget_);
 
         connect(ui_->btnArming, SIGNAL(clicked()), this, SLOT(on_btnArming_clicked()));
+        connect(ui_->btnCtrl_start, SIGNAL(clicked()), this, SLOT(on_btnCtrlStart_clicked()));
         connect(ui_->btnTransitToFF, SIGNAL(clicked()), this, SLOT(on_btnTransitToFF_clicked()));
         
         connect(ui_->btnUsePlanner, SIGNAL(clicked()), this, SLOT(on_btnUsePlanner_clicked()));
@@ -101,7 +102,22 @@ namespace px4_gcs_rqt {
             ROS_INFO("DISARMED");
         std_srvs::SetBool srv;
         srv.request.data = arming_flag_;
-        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
+        ros::service::call<std_srvs::SetBool>("/agent1/ctrl_alloc/arming", srv);
+        ros::service::call<std_srvs::SetBool>("/agent2/ctrl_alloc/arming", srv);
+    }
+
+    void GcsPlugin::on_btnCtrlStart_clicked()
+    {
+        ctrl_start_flag_ = !ctrl_start_flag_;
+        if(ctrl_start_flag_ == true)
+            ROS_INFO("ctrl start");
+        else
+            ROS_INFO("ctrl stop");
+
+        std_srvs::SetBool srv;
+        srv.request.data = ctrl_start_flag_;
+        ros::service::call<std_srvs::SetBool>("/agent1/coop_ctrller/start", srv);
+        ros::service::call<std_srvs::SetBool>("/agent2/coop_ctrller/start", srv);
     }
 
      void GcsPlugin::on_btnTransitToFF_clicked()
