@@ -72,7 +72,7 @@ namespace px4_gcs_rqt {
 
     private slots:
         void on_btnArming_clicked();
-        void on_btnTransitToFF_clicked();
+        void on_btnGrasp_clicked();
         void on_btnUsePlanner_clicked();
         void on_btnTransitToPerch_clicked();
         

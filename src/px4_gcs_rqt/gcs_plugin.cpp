@@ -16,7 +16,7 @@
 
 // #include <mavros_msgs/CommandInt.h>
 
-#include "ui_gcs_plugin_6dof.h"
+#include "ui_gcs_plugin_6dofAM.h"
 
 // #include "px4_gcs_rqt/service_caller.h"
 
@@ -54,10 +54,10 @@ namespace px4_gcs_rqt {
         context.addWidget(widget_);
 
         connect(ui_->btnArming, SIGNAL(clicked()), this, SLOT(on_btnArming_clicked()));
-        connect(ui_->btnTransitToFF, SIGNAL(clicked()), this, SLOT(on_btnTransitToFF_clicked()));
+        connect(ui_->btnTransitToPerch, SIGNAL(clicked()), this, SLOT(on_btnTransitToPerch_clicked()));
         
         connect(ui_->btnUsePlanner, SIGNAL(clicked()), this, SLOT(on_btnUsePlanner_clicked()));
-        connect(ui_->btnTransitToPerch, SIGNAL(clicked()), this, SLOT(on_btnTransitToPerch_clicked()));
+        connect(ui_->btnGrasp, SIGNAL(clicked()), this, SLOT(on_btnGrasp_clicked()));
 
         connect(ui_->btnDown, SIGNAL(clicked()), this, SLOT(on_btnDown_clicked()));
         connect(ui_->btnUp, SIGNAL(clicked()), this, SLOT(on_btnUp_clicked()));
@@ -104,12 +104,12 @@ namespace px4_gcs_rqt {
         ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
     }
 
-     void GcsPlugin::on_btnTransitToFF_clicked()
+     void GcsPlugin::on_btnTransitToPerch_clicked()
     {
-        ROS_INFO_STREAM("Transit_to_FF clicked.");
+        ROS_INFO_STREAM("Transit_to_Perch clicked.");
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/ctrller/transitTo_ff", srv);
+        ros::service::call<std_srvs::SetBool>("/ctrller/transitTo_perch", srv);
     }
 
     void GcsPlugin::on_btnUsePlanner_clicked()
@@ -122,16 +122,18 @@ namespace px4_gcs_rqt {
 
         std_srvs::SetBool srv;
         srv.request.data = useTrajectory_flag_;
+        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/use_ext_sp", srv);
+        ros::service::call<std_srvs::SetBool>("/planner_start", srv);
         ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
     }
 
-    void GcsPlugin::on_btnTransitToPerch_clicked()
+    void GcsPlugin::on_btnGrasp_clicked()
     {
-        ROS_INFO_STREAM("Transit_to_perch clicked.");
+        ROS_INFO_STREAM("Grasp clicked.");
 
         std_srvs::SetBool srv;
         srv.request.data = true;
-        ros::service::call<std_srvs::SetBool>("/ctrller/transitTo_perch", srv); // TODO - temporary service name
+        ros::service::call<std_srvs::SetBool>("/ctrl_alloc/gripper", srv); // TODO - temporary service name
     }
 
     void GcsPlugin::on_btnUp_clicked()
