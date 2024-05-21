@@ -122,7 +122,8 @@ namespace px4_gcs_rqt {
 
         std_srvs::SetBool srv;
         srv.request.data = useTrajectory_flag_;
-        ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
+        // ros::service::call<std_srvs::SetBool>("/ref_planner/use_ext_sp", srv);
+        ros::service::call<std_srvs::SetBool>("/reorient_planning/start", srv);
     }
 
     void GcsPlugin::on_btnTransitToPerch_clicked()
