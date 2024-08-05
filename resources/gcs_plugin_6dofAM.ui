@@ -255,7 +255,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Arming</string>
+      <string>Arming/Simulator_Start</string>
      </property>
      <property name="iconSize">
       <size>
