@@ -102,6 +102,7 @@ namespace px4_gcs_rqt {
         std_srvs::SetBool srv;
         srv.request.data = arming_flag_;
         ros::service::call<std_srvs::SetBool>("/ctrl_alloc/arming", srv);
+        ros::service::call<std_srvs::SetBool>("/simulator/ctrller_start", srv);
     }
 
      void GcsPlugin::on_btnTransitToFF_clicked()
